@@ -16,7 +16,7 @@ using namespace std;
 
 /*
 Function Name: ReverseArray
-----------------------------------------------------------
+
 Input:
  - arr: a constant integer array passed by pointer (read-only)
  - size: the number of elements in the array
@@ -47,6 +47,7 @@ int *ReverseArray(int const arr[], int size)
 
 /*
 Function Name: print
+
 Input:
  - arr: a constant integer array (read-only)
  - size: the number of elements in the array
