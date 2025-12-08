@@ -1,47 +1,109 @@
-/*
-File Name: NumberArray.h
-Author: Bramesh Patel
-Date: 10/23/2025
-
-Description:
-Header file for the NumberArray class. The class dynamically allocates
-a floating-point array and provides functions to set, get, and calculate
-statistics like minimum, maximum, and average.
-*/
-
 #ifndef NUMBERARRAY_H
 #define NUMBERARRAY_H
 
 #include <iostream>
+#include <stdexcept>
 using namespace std;
 
+template <typename T>
 class NumberArray
 {
 private:
-    double *numbers;  // pointer to dynamic array
-    int size;         // array size
+    T* numbers;   // pointer to dynamic array
+    int size;     // array size
 
 public:
-    static const int MAX_SIZE = 10;       // default array size
-    static const double DEFAULT_VALUE;    // default value for invalid access
+    static const int MAX_SIZE = 10;
 
-    // Constructors and Destructor
-    NumberArray(int s = MAX_SIZE);
-    ~NumberArray();
+    // ---------------------------------------------------
+    // Constructor (default or sized)
+    // ---------------------------------------------------
+    NumberArray(int s = MAX_SIZE)
+    {
+        size = s;
+        numbers = new T[size];
+        for (int i = 0; i < size; i++)
+            numbers[i] = T();  // default initialize
+    }
 
-    // Mutator
-    void setNumber(int index, double value);
+    // ---------------------------------------------------
+    // Destructor
+    // ---------------------------------------------------
+    ~NumberArray()
+    {
+        cout << "The destructor is running\n";
+        delete[] numbers;
+    }
 
-    // Accessor
-    double getNumber(int index) const;
+    // ---------------------------------------------------
+    // Mutator (throws out_of_range)
+    // ---------------------------------------------------
+    void setNumber(int index, T value)
+    {
+        if (index < 0 || index >= size)
+            throw out_of_range("The index is out of the bounds of the array, number not stored");
+        numbers[index] = value;
+    }
 
-    // Statistical functions
-    double getHighest() const;
-    double getLowest() const;
-    double getAverage() const;
+    // ---------------------------------------------------
+    // Accessor (throws out_of_range)
+    // ---------------------------------------------------
+    T getNumber(int index) const
+    {
+        if (index < 0 || index >= size)
+            throw out_of_range("The index is out of the bounds of the array, number not stored");
+        return numbers[index];
+    }
 
-    // Display
-    void print() const;
+    // ---------------------------------------------------
+    // Return highest value
+    // ---------------------------------------------------
+    T getHighest() const
+    {
+        T maxVal = numbers[0];
+        for (int i = 1; i < size; i++)
+            if (numbers[i] > maxVal)
+                maxVal = numbers[i];
+        return maxVal;
+    }
+
+    // ---------------------------------------------------
+    // Return lowest value
+    // ---------------------------------------------------
+    T getLowest() const
+    {
+        T minVal = numbers[0];
+        for (int i = 1; i < size; i++)
+            if (numbers[i] < minVal)
+                minVal = numbers[i];
+        return minVal;
+    }
+
+    // ---------------------------------------------------
+    // Return average
+    // ---------------------------------------------------
+    double getAverage() const
+    {
+        double sum = 0;
+        for (int i = 0; i < size; i++)
+            sum += numbers[i];
+        return sum / size;
+    }
+
+    // ---------------------------------------------------
+    // Print array contents
+    // ---------------------------------------------------
+    void print() const
+    {
+        for (int i = 0; i < size; i++)
+            cout << numbers[i] << " ";
+        cout << endl;
+    }
+
+    // ---------------------------------------------------
+    // Getter for size
+    // ---------------------------------------------------
+    int getSize() const { return size; }
 };
 
 #endif
